@@ -43,7 +43,7 @@ public class MedicoService {
     }
 
     public Medico registerMedico(CreateMedicoDTO json) {
-        if(medicoRepository.findByCrm(json.cpf()).isPresent()) {
+        if(medicoRepository.findByCpf(json.cpf()).isPresent()) {
             throw new IllegalArgumentException("CPF já cadastrado!");
         }
 
