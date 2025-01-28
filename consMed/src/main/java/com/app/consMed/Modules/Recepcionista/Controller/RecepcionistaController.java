@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class RecepcionistaController extends BaseRecepcionistaController {
+public class RecepcionistaController extends BaseRecepcionistaController implements RecepcionistaDocumentation {
     @Autowired
     private RecepcionistaService recepcionistaService;
 
@@ -59,7 +59,7 @@ public class RecepcionistaController extends BaseRecepcionistaController {
     @Transactional
     @DeleteMapping("/delete/{cpf}")
     public ResponseEntity<Object> deletarAdminByCpf(@PathVariable String cpf) {
-        if(!recepcionistaService.findByCpf(cpf).isPresent()) return ResponseEntity.notFound().build();
+        if(recepcionistaService.findByCpf(cpf).isEmpty()) return ResponseEntity.notFound().build();
         recepcionistaService.deleteRecepcionistaByCpf(cpf);
         return ResponseEntity.noContent().build();
     }
@@ -67,7 +67,7 @@ public class RecepcionistaController extends BaseRecepcionistaController {
     @Transactional
     @PutMapping("/update/{cpf}")
     public ResponseEntity<Object> atualizarRecepcionistaByCpf(@PathVariable String cpf, @RequestBody CreateRecepcionistaDTO request) {
-        if(!recepcionistaService.findByCpf(cpf).isPresent())
+        if(recepcionistaService.findByCpf(cpf).isEmpty())
             return ResponseEntity.notFound().build();
         Recepcionista updateRecepcionista = recepcionistaService.updateRecepcionistaByCpf(cpf, request);
         if(updateRecepcionista != null) {

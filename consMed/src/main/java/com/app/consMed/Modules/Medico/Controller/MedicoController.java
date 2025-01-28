@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class MedicoController extends BaseMedicoController {
+public class MedicoController extends BaseMedicoController implements MedicoDocumentation {
     @Autowired
     private MedicoService medicoService;
 
@@ -94,7 +94,7 @@ public class MedicoController extends BaseMedicoController {
     @Transactional
     @DeleteMapping("/delete/{cpf}")
     public ResponseEntity<Object> deleteMedicoByCpf(@PathVariable String cpf) {
-        if(!medicoService.findByCpf(cpf).isPresent()) return ResponseEntity.notFound().build();
+        if(medicoService.findByCpf(cpf).isEmpty()) return ResponseEntity.notFound().build();
         medicoService.deleteMedicoByCpf(cpf);
         return ResponseEntity.noContent().build();
     }
@@ -102,7 +102,7 @@ public class MedicoController extends BaseMedicoController {
     @Transactional
     @PutMapping("/update/{cpf}")
     public ResponseEntity<Object> updateMedicoById(@PathVariable String cpf, @RequestBody CreateMedicoDTO request) {
-        if(!medicoService.findByCpf(cpf).isPresent())
+        if(medicoService.findByCpf(cpf).isEmpty())
             return ResponseEntity.notFound().build();
         Medico updateMedico = medicoService.updateMedicoByCpf(cpf, request);
         if(updateMedico != null) {

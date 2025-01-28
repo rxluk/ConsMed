@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class UserController extends BaseUserController {
+public class UserController extends BaseUserController implements UserDocumentation {
     @Autowired
     private UserService userService;
 

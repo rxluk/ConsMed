@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class AdminController extends BaseAdminController {
+public class AdminController extends BaseAdminController implements AdminDocumentation {
     @Autowired
     private AdminService adminService;
 
