@@ -1,7 +1,6 @@
 package com.app.consMed.Modules.Medico.Controller;
 
 import com.app.consMed.Modules.Medico.DTOs.CreateMedicoDTO;
-import com.app.consMed.Modules.Medico.DTOs.DetailMedicoDTO;
 import com.app.consMed.Modules.Medico.Enums.Especialidade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -5,6 +5,7 @@ import com.app.consMed.Modules.Disponibilidade.DTOs.UpdateDisponibilidadeDTO;
 import com.app.consMed.Modules.Disponibilidade.Domain.Disponibilidade;
 import com.app.consMed.Modules.Disponibilidade.Service.DisponibilidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,37 +13,44 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/disponibilidades")
-public class DisponibilidadeController {
+public class DisponibilidadeController extends BaseDisponibilidadeController implements DisponibilidadeDocumentation {
+
     @Autowired
     private DisponibilidadeService disponibilidadeService;
 
-    @GetMapping
-    public List<Disponibilidade> findAll() {
-        return disponibilidadeService.findAll();
+    @Override
+    public ResponseEntity<Object> findAll() {
+        List<Disponibilidade> disponibilidades = disponibilidadeService.findAll();
+        return disponibilidades.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(disponibilidades);
     }
 
-    @GetMapping("/{id}")
-    public Optional<Disponibilidade> findById(@PathVariable Long id) {
-        return disponibilidadeService.findById(id);
+    @Override
+    public ResponseEntity<Object> findById(@PathVariable Long id) {
+        Optional<Disponibilidade> disponibilidade = disponibilidadeService.findById(id);
+        return disponibilidade.isPresent() ? ResponseEntity.ok(disponibilidade.get()) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/medico/{medicoId}")
-    public List<Disponibilidade> findByMedico(@PathVariable Long medicoId) {
-        return disponibilidadeService.findByMedico(medicoId);
+    @Override
+    public ResponseEntity<Object> findByMedico(@PathVariable Long medicoId) {
+        List<Disponibilidade> disponibilidades = disponibilidadeService.findByMedico(medicoId);
+        return disponibilidades.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(disponibilidades);
     }
 
-    @PostMapping
-    public Disponibilidade create(@RequestBody CreateDisponibilidadeDTO dto) {
-        return disponibilidadeService.registerDisponibilidade(dto);
+    @Override
+    public ResponseEntity<Object> create(@RequestBody CreateDisponibilidadeDTO dto) {
+        Disponibilidade disponibilidade = disponibilidadeService.registerDisponibilidade(dto);
+        return ResponseEntity.status(201).body(disponibilidade);
     }
 
-    @PutMapping("/{id}")
-    public Disponibilidade update(@PathVariable Long id, @RequestBody UpdateDisponibilidadeDTO dto) {
-        return disponibilidadeService.updateDisponibilidade(id, dto);
+    @Override
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody UpdateDisponibilidadeDTO dto) {
+        Disponibilidade updatedDisponibilidade = disponibilidadeService.updateDisponibilidade(id, dto);
+        return ResponseEntity.ok(updatedDisponibilidade);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         disponibilidadeService.deleteDisponibilidade(id);
+        return ResponseEntity.noContent().build();
     }
 }
