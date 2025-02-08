@@ -1,13 +1,17 @@
 package com.app.consMed.Modules.Medico.Domain;
 
+import com.app.consMed.Modules.Disponibilidade.Domain.Disponibilidade;
 import com.app.consMed.Modules.Medico.Enums.Especialidade;
 import com.app.consMed.Modules.User.Domain.User;
 import com.app.consMed.Modules.User.Enums.UserRole;
 import com.app.consMed.Modules.Utils.Contato;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "medico")
-@Table(name = "user")
+@Table(name = "medico")
 public class Medico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +26,8 @@ public class Medico {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Disponibilidade> disponibilidades = new ArrayList<>();
 
     public Medico() {
     }
@@ -37,13 +43,14 @@ public class Medico {
 
     public Medico(String nome, String cpf, String crm, Especialidade especialidade,
                   String estado, String cidade, String bairro, String rua, int numero, String telefone,
-                  String login, String password, UserRole role) {
+                  String login, String password, UserRole role, List<Disponibilidade> disponibilidades) {
         this.nome = nome;
         this.cpf = cpf;
         this.crm = crm;
         this.especialidade = especialidade;
         this.contato = new Contato(estado, cidade, bairro, rua, numero, telefone);
         this.user = new User(login, password, role);
+        this.disponibilidades = disponibilidades;
     }
 
     public Long getId() {
@@ -100,5 +107,13 @@ public class Medico {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Disponibilidade> getDisponibilidades() {
+        return disponibilidades;
+    }
+
+    public void setDisponibilidades(List<Disponibilidade> disponibilidades) {
+        this.disponibilidades = disponibilidades;
     }
 }
