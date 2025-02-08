@@ -70,10 +70,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/admin/update/{cpf}").hasRole("ADMIN")
 
                         // Endpoints de recepcionista
-                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/{cpf}").hasRole("RECEPCIONISTA")
-                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/all").hasRole("RECEPCIONISTA")
-                        .requestMatchers(HttpMethod.DELETE, "/recepcionista/delete/{cpf}").hasRole("RECEPCIONISTA")
-                        .requestMatchers(HttpMethod.PUT, "/recepcionista/update/{cpf}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/{cpf}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/recepcionista/delete/{cpf}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/recepcionista/update/{cpf}").hasRole("ADMIN")
 
                         // Endpoints de usuário
                         .requestMatchers(HttpMethod.GET, "/user/get/{login}").hasRole("ADMIN")
