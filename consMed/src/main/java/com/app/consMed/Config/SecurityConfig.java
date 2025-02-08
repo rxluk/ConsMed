@@ -56,6 +56,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/recepcionista/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/medico/register").permitAll()
 
+                        // Endpoints de consulta com role RECEPCIONISTA
+                        .requestMatchers(HttpMethod.GET, "/consulta/get/{id}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/consulta/get/all").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.POST, "/consulta/create").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.PUT, "/consulta/update/{id}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.DELETE, "/consulta/delete/{id}").hasRole("RECEPCIONISTA")
+
                         // Endpoints de administrador
                         .requestMatchers(HttpMethod.GET, "/admin/get/{cpf}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/admin/get/all").hasRole("ADMIN")
