@@ -38,7 +38,9 @@ public class PacienteService {
         Contato contato = new Contato(dto.estado(), dto.cidade(), dto.bairro(), dto.rua(), dto.numero(), dto.telefone());
         Paciente paciente = new Paciente(dto.nome(), dto.cpf(), contato);
         paciente = pacienteRepository.save(paciente);
-        return new PacienteResponseDTO(paciente.getId(), paciente.getNome(), paciente.getCpf(), paciente.getContato());
+        return new PacienteResponseDTO(paciente.getId(), paciente.getNome(), paciente.getCpf(),
+                paciente.getContato().getEstado(), paciente.getContato().getCidade(), paciente.getContato().getBairro(), paciente.getContato().getRua(),
+                paciente.getContato().getNumero(), paciente.getContato().getTelefone());
     }
 
     @Transactional

@@ -4,7 +4,6 @@ import com.app.consMed.Modules.Medico.Domain.Medico;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity(name = "disponibilidade")
 @Table(name = "disponibilidade")
