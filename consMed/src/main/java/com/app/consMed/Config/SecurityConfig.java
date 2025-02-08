@@ -1,6 +1,9 @@
 package com.app.consMed.Config;
 
 import com.app.consMed.Security.SecurityFilter;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@SecurityScheme(
+        name = "Bearer Auth",
+        description = "JWT auth description",
+        scheme = "bearer",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        in = SecuritySchemeIn.HEADER
+)
 public class SecurityConfig {
 
     @Autowired
@@ -46,31 +57,46 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/medico/register").permitAll()
 
                         // Endpoints de administrador
-                        .requestMatchers(HttpMethod.GET, "/admin/get/{cpf}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/admin/get/all").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/admin/delete/{cpf}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/admin/update/{cpf}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/admin/get/{cpf}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/admin/get/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/admin/delete/{cpf}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/admin/update/{cpf}").hasRole("ADMIN")
 
                         // Endpoints de recepcionista
-                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/{cpf}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/all").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/recepcionista/delete/{cpf}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/recepcionista/update/{cpf}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/{cpf}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/recepcionista/get/all").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.DELETE, "/recepcionista/delete/{cpf}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.PUT, "/recepcionista/update/{cpf}").hasRole("RECEPCIONISTA")
 
                         // Endpoints de usuário
-                        .requestMatchers(HttpMethod.GET, "/user/get/{login}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/user/get/all").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/user/delete/{login}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/user/get/{login}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/get/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/user/delete/{login}").hasRole("ADMIN")
 
                         // Endpoints de médico
-                        .requestMatchers(HttpMethod.GET, "/medico/get/{cpf}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/medico/get/{crm}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/medico/get/all").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/medico/get/{especiadade}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/medico/delete/{cpf}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/medico/update/{cpf}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/user/put/{login}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/medico/get/{cpf}").hasRole("ADMIN, RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/medico/get/{crm}").hasRole("ADMIN, RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/medico/get/all").hasRole("ADMIN, RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/medico/get/{especiadade}").hasRole("ADMIN, RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.DELETE, "/medico/delete/{cpf}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/medico/update/{cpf}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/user/put/{login}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/user/get/all-with-password").hasRole("ADMIN")
+
+                        // Endpoints de disponibilidade (DisponibilidadeController)
+                        .requestMatchers(HttpMethod.GET, "/disponibilidades").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/disponibilidades/{id}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/disponibilidades/medico/{medicoId}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.POST, "/disponibilidades").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.PUT, "/disponibilidades/{id}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.DELETE, "/disponibilidades/{id}").hasRole("RECEPCIONISTA")
+
+                        // Endpoints de paciente (PacienteController) - com base no /paciente
+                        .requestMatchers(HttpMethod.GET, "/paciente/get/{cpf}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.GET, "/paciente/get/all").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.POST, "/paciente/create").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.PUT, "/paciente/update/{cpf}").hasRole("RECEPCIONISTA")
+                        .requestMatchers(HttpMethod.DELETE, "/paciente/delete/{cpf}").hasRole("RECEPCIONISTA")
 
                         .anyRequest().authenticated()
                 )

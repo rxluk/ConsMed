@@ -2,7 +2,8 @@ package com.app.consMed.Modules.User.Enums;
 
 public enum UserRole {
         ADMIN("admin"),
-        USER("user");
+        RECEPCIONISTA("recepcionista"),
+        MEDICO("medico");
 
         private String role;
 
