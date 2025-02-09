@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PERMIT_ALL).permitAll()
                         // Endpoints de autenticação
+                        .requestMatchers(HttpMethod.GET, "/auth/role").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/user/register").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/auth/admin/register").hasRole("ADMIN")

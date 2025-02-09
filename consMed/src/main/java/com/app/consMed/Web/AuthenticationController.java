@@ -10,6 +10,8 @@ import com.app.consMed.Modules.User.DTOs.LoginDTO;
 import com.app.consMed.Modules.User.DTOs.LoginResponseDTO;
 import com.app.consMed.Modules.User.DTOs.CreateUserDTO;
 import com.app.consMed.Modules.User.Service.UserService;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("auth")
 public class AuthenticationController implements AuthenticationDocumentation {
 
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -30,6 +33,30 @@ public class AuthenticationController implements AuthenticationDocumentation {
     @Autowired
     private MedicoService medicoService;
 
+    @SecurityRequirement(name = "Bearer Auth")
+    @GetMapping("/role")
+    public ResponseEntity<String> getUserRole(@RequestHeader("Authorization") String token) {
+        try {
+            // Remove "Bearer " do token caso esteja presente
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            // Decodifica o token
+            DecodedJWT decodedJWT = JWT.decode(token);
+
+            // Extrai a role do payload
+            String role = decodedJWT.getClaim("role").asString();
+
+            if (role == null) {
+                return ResponseEntity.badRequest().body("Role não encontrada no token!");
+            }
+
+            return ResponseEntity.ok(role);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao processar token: " + e.getMessage());
+        }
+    }
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDTO json) {
         try {
