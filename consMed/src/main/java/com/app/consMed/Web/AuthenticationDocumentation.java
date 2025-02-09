@@ -3,6 +3,7 @@ package com.app.consMed.Web;
 import com.app.consMed.Modules.Admin.DTOs.CreateAdminDTO;
 import com.app.consMed.Modules.Medico.DTOs.CreateMedicoDTO;
 import com.app.consMed.Modules.Recepcionista.DTOs.CreateRecepcionistaDTO;
+import com.app.consMed.Modules.User.DTOs.LoginDTO;
 import com.app.consMed.Modules.User.DTOs.LoginResponseDTO;
 import com.app.consMed.Modules.User.DTOs.CreateUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,7 @@ public interface AuthenticationDocumentation {
             @ApiResponse(responseCode = "400", description = "Falha na autenticação")
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid CreateUserDTO json);
+    ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDTO json);
 
     @Operation(summary = "Registra um novo usuário", method = "POST")
     @ApiResponses(value = {

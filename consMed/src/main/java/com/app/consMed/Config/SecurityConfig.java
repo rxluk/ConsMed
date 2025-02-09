@@ -51,10 +51,10 @@ public class SecurityConfig {
                         .requestMatchers(PERMIT_ALL).permitAll()
                         // Endpoints de autenticação
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/user/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/admin/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/recepcionista/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/medico/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/user/register").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/admin/register").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/recepcionista/register").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/medico/register").hasRole("ADMIN")
 
                         // Endpoints de consulta com role RECEPCIONISTA
                         .requestMatchers(HttpMethod.GET, "/consulta/get/{id}").hasRole("RECEPCIONISTA")
